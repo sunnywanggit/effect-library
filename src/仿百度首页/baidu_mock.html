@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>百度一下，你就知道</title>
+    <script src="//at.alicdn.com/t/font_874872_usl87gmpkba.js"></script>
+    <link rel="stylesheet" href="./baidu_mock_style.css">
+    <link rel="shortcut icon" href="https://www.baidu.com/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="layout">
+        <div class="header-container">
+            <div class="header">
+                <ul>
+                    <li>新闻</li>
+                    <li>hao123</li>
+                    <li>地图</li>
+                    <li>视频</li>
+                    <li>贴吧</li>
+                    <li>学术</li>
+                    <li>登录</li>
+                    <li id="settingBtn">设置</li>
+
+                </ul>
+                <!--<span>更多产品</span>-->
+            </div>
+            <div class="setting clearfix">
+                <span class="settingAngle2"></span>
+                <span class="settingAngle"></span>
+                <ul class="settingList">
+                    <li>搜索设置</li>
+                    <li>高级搜索</li>
+                    <li>关闭预测</li>
+                    <li>隐私设置</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="moreProduct moreProductInactive">
+                <span id="moreProductSpan" class="spanActive">更多产品</span>
+            </div>
+            <div class="productWrapper">
+                <ul>
+                    <li>
+                        <span style="background-image: url('https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/home/img/logos/nuomi_7f5cd35.png');"></span><br>
+                        <span>糯米</span>
+                    </li>
+                    <li>
+                        <span style="background-image: url('https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/home/img/logos/qqjt_9809ca8.png');"></span><br>
+                        <span>音乐</span>
+                    </li>
+                    <li>
+                        <span style="background-image: url('https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/home/img/logos/image_55b5909.png')"></span><br>
+                        <span>图片</span>
+                    </li>
+                    <li>
+                        <span style="background-image: url('https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/home/img/logos/zhidao_cbf2aff.png')"></span><br>
+                        <span>知道</span>
+                    </li>
+                    <li>
+                        <span style="background-image: url('https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/home/img/logos/wenku_aaf198d.png')"></span><br>
+                        <span>文库</span>
+                    </li>
+                    <li>
+                        <span style="background-image: url('https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/home/img/logos/fengyunbang_1986a40.png')"></span><br>
+                        <span>风云榜</span>
+                    </li>
+                </ul>
+                <div class="allProduct">
+                    <span>全部产品>></span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="wrapper">
+            <div class="logo">
+                <img src="https://www.baidu.com/img/bd_logo1.png" alt="">
+            </div>
+            <div class="rowWrapper">
+                <div class="inputWrapper">
+                    <input class="keyword" id="keyword" type="text">
+                    <span class="spanWrapper">
+                <svg class="icon">
+                  <use xlink:href="#icon-mic"></use>
+                </svg>
+                <span class="seperator"></span>
+                <svg class="icon">
+                  <use xlink:href="#icon-camera"></use>
+                </svg>
+              </span>
+
+                </div>
+                <button>百度一下</button>
+            </div>
+            <div class="suggestionWrapper">
+                <ul id="suggestion" class="suggestion">
+                    <li>item 1</li>
+                    <li>item 2</li>
+                    <li>item 3</li>
+                    <li>item 4</li>
+                    <li class="feedback clearfix"><span>反馈</span></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <div class="qrcode">
+                <span style="background-image: url('https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/home/img/qrcode/zbios_efde696.png')"></span>
+                <span>百度</span>
+            </div>
+            <div class="about">
+                <ul>
+                    <li><span>把百度设为主页</span></li>
+                    <li><span>关于百度</span></li>
+                    <li><span>About Baidu</span></li>
+                    <li><span>百度推广</span></li>
+                </ul>
+            </div>
+            <div class="copyright">
+                <ul>
+                    <li><span>&copy2018 Baidu</span></li>
+                    <li><span style="text-decoration: underline;cursor: pointer;">使用百度前必读</span></li>
+                    <li><span style="text-decoration: underline;cursor: pointer;">意见反馈</span></li>
+                    <li><span>京ICP证030173号</span></li>
+                    <li><span class="icon1"></span></li>
+                </ul>
+                <span style="text-decoration: underline;cursor: pointer;">京公网安备11000002000001号</span>
+                <span class="icon2"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var keyword = document.querySelector('#keyword');
+        var settingBtn = document.querySelector('#settingBtn');
+        var setting = document.querySelector('.setting ');
+        var suggestion = document.querySelector('.suggestion');
+        keyword.addEventListener('input',function(e) {
+            if(e.target.value.trim() !== '') {
+                suggestion.classList.add('active');
+                keyword.classList.add('noBottom');
+
+            }else {
+                suggestion.classList.remove('active');
+                keyword.classList.remove('noBottom');
+
+            }
+
+        });
+        keyword.addEventListener('blur',function(e) {
+            keyword.classList.remove('noBottom');
+            suggestion.classList.remove('active');
+        });
+
+        settingBtn.addEventListener('mouseover',function(e) {
+            console.log('mouseover'); document.querySelector('.setting').classList.add('active');
+        });
+
+        function getAbsolutePos(obj) {
+            if(obj === null || obj === undefined) {
+                return;
+            }
+            var pos = {};
+            pos.x = obj.offsetLeft;
+            pos.y = obj.offsetTop;
+            while (obj = obj.offsetParent) {
+                pos.x += obj.offsetLeft;
+                pos.y += obj.offsetTop;
+
+            }
+            return pos;
+        }
+
+        var div = document.querySelector('.settingList');
+        var divpos = getAbsolutePos(div);
+
+        // TODO 优化
+        var handler = function(e) {
+            var x = e.clientX;
+            var y = e.clientY;
+            console.log('e的坐标是 ' + x + " , " + y);
+            var divx1 = divpos.x;
+            var divy1 = divpos.y - 20;  // TODO 优化
+            var divx2 = divx1 + div.offsetWidth;
+            var divy2 = divy1 + div.offsetHeight;
+            console.log('div 的坐标是 ' + divx1 + " , " + divy1 + " , " + divx2 + " , " + divy2);
+            if( x < divx1 || x > divx2 || y < divy1 || y > divy2){
+                // 如果离开了列表区域就隐藏
+                document.querySelector('.setting').classList.remove('active');
+                e.stopPropagation();
+            }
+
+        };
+        var timer;
+        var handler2 = function(e) {
+            if(timer) {
+                clearTimeout(timer);
+            }
+            timer = setTimeout(function() {
+                console.log('延迟执行...');
+                handler(e);
+            }, 500);
+
+        }
+        settingBtn.addEventListener('mouseleave', handler2);
+        setting.addEventListener('mouseleave', handler2);
+
+        var moreProductSpan = document.querySelector('#moreProductSpan');
+        var productWrapper = document.querySelector('.productWrapper');
+        moreProductSpan.addEventListener('mouseover',function () {
+            productWrapper.classList.add('visible');
+            moreProductSpan.classList.remove('spanActive');
+            moreProductSpan.classList.add('spanInactive');
+            moreProductSpan.parentNode.classList.remove('moreProductInactive');
+        })
+
+        var sidebar = document.querySelector('.sidebar');
+        var sidebar_pos = getAbsolutePos(sidebar);
+        // TODO 优化
+        var sidebarHandler = function (e) {
+            var x = e.clientX;
+            var y = e.clientY;
+            console.log('e的坐标是 ' + x + " , " + y);
+            var divx1 = sidebar_pos.x;
+            var divy1 = sidebar_pos.y;
+            var divx2 = divx1 + sidebar.offsetWidth;
+            var divy2 = divy1 + sidebar.offsetHeight;
+            console.log('div 的坐标是 ' + divx1 + " , " + divy1 + " , " + divx2 + " , " + divy2);
+            if( x < divx1 || x > divx2 || y < divy1 || y > divy2){
+                // 如果离开了列表区域就隐藏
+                productWrapper.classList.remove('visible');
+                moreProductSpan.classList.add('spanActive');
+                moreProductSpan.classList.remove('spanInactive');
+                moreProductSpan.parentNode.classList.add('moreProductInactive');
+                e.stopPropagation();
+            }
+        }
+        var timer2;
+        var sidebarHander2 = function (e) {
+            if(timer2) {
+                clearTimeout(timer2);
+            }
+            timer2 = setTimeout(function() {
+                console.log('延迟执行...');
+                sidebarHandler(e);
+            }, 500);
+        }
+        sidebar.addEventListener('mouseleave',sidebarHander2);
+
+
+
+    </script>
+
+</body>
+</html>

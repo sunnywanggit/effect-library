@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>带伪元素的bubble提示框</title>
+    <style>
+
+        .ct {
+            width: 200px;
+            margin: 0 auto;
+        }
+
+        .dialog {
+            width: 200px;
+            height: 100px;
+            border: 1px solid #ccc;
+            position: relative;
+            margin-top: 60px;
+            background: white;
+        }
+
+        .bubble::before {
+            content: '';
+            display: block;
+            position: absolute;
+            border: 10px solid rgba(0,0,0,1);
+        }
+        .bubble-grey::before {
+            transform: rotate(45deg);
+            top: -10px;
+            left: 10px;
+            z-index: -1;
+            border-right: 10px solid rgba(0,0,0,0);
+            border-bottom: 10px solid rgba(0,0,0,0);
+
+        }
+
+        .bubble-red::before {
+            left: 180px;
+            background: red;
+            height: 0;
+            width: 0;
+            border: 10px solid red;
+            border-left: 10px solid rgba(255,255,255,1);
+            border-bottom: 10px solid rgba(255,255,255,1);
+        }
+
+        .bubble-white::before {
+            width: 19px;
+            height: 19px;
+            border: none;
+            border-left: 1px solid #ccc;
+            border-top: 1px solid #ccc;
+            transform: rotate(45deg);
+            top: -10px;
+            left: 10px;
+            background: white;
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <h2>利用伪元素实现的bubble提示框</h2>
+    <div class="ct">
+        <div class="dialog bubble bubble-grey">
+        </div>
+        <div class="dialog bubble bubble-red"></div>
+        <div class="dialog bubble bubble-white"></div>
+
+    </div>
+
+
+</body>
+</html>

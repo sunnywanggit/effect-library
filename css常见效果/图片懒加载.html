@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+    <title>图片懒加载</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .ct{
+            width: 820px;
+            margin: 0 auto;
+            /*height: 100vh;*/
+            /*overflow: scroll;*/ /*这里加上了之后就不是window的滚动条了，出现的是ct的滚动条*/
+        }
+        .ct>ul:after{
+            content: '';
+            display: block;
+            clear: both;
+        }
+        .ct>ul>li{
+            width: 400px;
+            display: inline-block;
+            margin-right: 10px;
+            float: left;
+        }
+        .ct>ul>li>img{
+            width: 100%;
+        }
+        ul,ol{
+            list-style: none;
+        }
+    </style>
+</head>
+<body>
+            <div class="ct">
+                <ul>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+                    <li><img src="http://smashinghub.com/wp-content/uploads/2014/08/cool-loading-animated-gif-3.gif" alt=""></li>
+
+                </ul>
+            </div>
+
+            <script>
+
+                var App = {
+                    init: function () {
+                        this.timer = undefined;
+                        this.id = 1;
+                        this.bind();
+                        this.isAppeared(this.showImage);
+
+                    },
+                    bind:function () {
+                        var _this = this;
+                        $(window).on('scroll',function () {
+                            _this.timer && clearTimeout(_this.timer);
+                            _this.timer = setTimeout(function () {
+                                _this.isAppeared.call(_this,_this.showImage); // 踩坑this!!! 要用function.call(_this)传递this，否则showImage的this找不到id属性
+                            },300)
+                        })
+
+                    },
+                    isAppeared:function (callback) {
+                        var _this = this;
+                        $('.ct>ul>li').not('[data-loaded]').each(function(index,node){
+                            var $node = $(node);
+                            // console.log($node);
+                            if($(window).scrollTop() + $(window).height() >= $node.offset().top){
+                                // console.log('出现了');
+                                callback && callback.call(_this,$node); // 踩坑this!!!
+                            }
+                        })
+                    },
+                    showImage:function ($node) {
+                        var $img = $node.find('img');
+                        //console.log('this.id  ' + this.id);
+                        $img.attr('src','http://cdn.jirengu.com/book.jirengu.com/img/' + this.id + '.jpg');
+                        this.id += 1;
+                        //console.log(this.id);
+                        $node.attr('data-loaded','yes');
+                    }
+                }
+                App.init();
+
+                // var ID = 1;
+                // var timer;
+                // $(window).on('scroll',function(){
+                //     timer && clearTimeout(timer);
+                //     timer = setTimeout(function () {
+                //         console.log($(this).scrollTop());
+                //         console.log($(this).height());
+                //         $('.ct>ul>li').not('[data-loaded]').each(function(index,node){
+                //             var $node = $(node);
+                //             console.log($node);
+                //             if($(window).scrollTop() + $(window).height() >= $node.offset().top){
+                //                 console.log('出现了');
+                //                 showNode($node);
+                //             }
+                //         })
+                //
+                //     },300)
+                //
+                //
+                // })
+                //
+                // function showNode($node) {
+                //     var $img = $node.find('img');
+                //     $img.attr('src','http://cdn.jirengu.com/book.jirengu.com/img/' + (ID++) + '.jpg');
+                //     $node.attr('data-loaded','yes');
+                // }
+            </script>
+
+</body>
+</html>

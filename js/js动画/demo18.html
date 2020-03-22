@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>js 实现简单动画效果</title>
+
+    <style>
+        #ball {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<div id="ball"></div>
+<script>
+    var ball = document.querySelector('#ball');
+    var offsetX = 500;
+    var moveOffset = 0;
+    var step = 5;
+    function move() {
+        if(moveOffset < offsetX) {
+            ball.style.left = parseInt(getComputedStyle(ball).left) + step + 'px'
+            moveOffset += step;
+            // setTimeout(move, 20); // 不推荐的方式
+            requestAnimationFrame(move);
+        }
+    }
+    move();
+</script>
+</body>
+</html>

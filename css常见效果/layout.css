@@ -1,0 +1,16 @@
+ul,ol {
+    list-style: none;
+}
+
+.layout {
+    width: 1000px;
+    margin: 0 auto;
+
+}
+li {
+    margin: 5px 0;
+}
+.back-btn {
+    display: block;
+    margin: 20px 0;
+}

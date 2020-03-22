@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ajax</title>
+</head>
+<body>
+    <a href="https://segmentfault.com/a/1190000004322487">XMLHttpRequest详细介绍</a>
+    <script>
+        // var xhr = new XMLHttpRequest();
+        // xhr.open('GET','/hello.json',true); // true 表示异步调用
+        // xhr.send();
+
+        // xhr.open('POST', '/login',true);
+        // xhr.send('username=xx&password=xx');  // POST 调用
+
+        // function makeData(obj) { // 拼装post请求的数据
+        //     var arr = [];
+        //     for(var key in obj) {
+        //         arr.push(key + '=' + obj[key]);
+        //     }
+        //     return arr.join('&');
+        // }
+        //
+        // var obj = {
+        //     'name': 'apple',
+        //     'size': 10
+        // }
+        // makeData(obj);
+
+        // xhr.onreadystatechange = function (ev) {
+        //     if(xhr.readyState === 4 && xhr.status === 200) {
+        //         // 请求成功了
+        //         console.log('hhhh ~' + xhr.responseText);
+        //     }
+        // }
+        //
+        // console.log('readyState', xhr.readyState);
+        // xhr.addEventListener('readystatechange',function (ev) {
+        //     console.log('readyState~: ' + xhr.readyState);
+        // })
+        //
+        // xhr.addEventListener('load',function (ev) {
+        //     console.log(xhr.status);
+        //     if(xhr.status >= 200 && xhr.status < 300 || xhr.status === 304)
+        //     {
+        //         var data = xhr.responseText;
+        //         console.log('data' + data);
+        //     }else {
+        //         console.log('error');
+        //     }
+        // })
+        //
+        // xhr.onerror = function (ev) {
+        //     console.log('error ~');
+        // }
+        // xhr.timeout = 3000; // 3秒钟之后就超时
+        // xhr.ontimeout = function (ev) {
+        //     console.log('超时 timeout');
+        // }
+        // xhr.upload.onprogress = function (ev) {
+        //     // 获取文件上传进度
+        // }
+    </script>
+
+    <script>
+        // 封装一个ajax
+        function  ajax(opts) {
+            var url = opts.url;
+            var type = opts.type || 'GET';
+            var dataType = opts.dataType || 'json'
+            var onsuccess = opts.onsuccess || function(){}
+            var onerror = opts.onerror || function(){}
+            var data = opts.data || {}
+
+            var dataStr = []
+            for(var key in data){
+                dataStr.push(key + '=' + data[key])
+            }
+            dataStr = dataStr.join('&')
+
+            if(type === 'GET'){
+                url += '?' + dataStr
+            }
+
+            var xhr = new XMLHttpRequest()
+            xhr.open(type, url, true)
+            xhr.onload = function(){
+                if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+                    //成功了
+                    if(dataType === 'json'){
+                        onsuccess( JSON.parse(xhr.responseText))
+                    }else{
+                        onsuccess( xhr.responseText)
+                    }
+                } else {
+                    onerror()
+                }
+            }
+            xhr.onerror = onerror
+            if(type === 'POST'){
+                xhr.send(dataStr)
+            }else{
+                xhr.send()
+            }
+
+        }
+
+        // ajax({
+        //     url: 'http://api.jirengu.com/weather.php',
+        //     data: {
+        //         city: '北京'
+        //     },
+        //     onsuccess: function(ret){
+        //         console.log(ret)
+        //     },
+        //     onerror: function(){
+        //         console.log('服务器异常')
+        //     }
+        // })
+    </script>
+
+    <script>
+        var xhr = new XMLHttpRequest();
+        // 跨域emmmm
+        // xhr.open('GET','http://www.recipepuppy.com/api/?i=garlic&q=noddles&p=1');
+        xhr.onreadystatechange = function (ev) {
+            console.log('readystatechagne ' + xhr.readyState);
+            switch (xhr.readyState){
+                case 1: {
+                    console.log('OPENED');
+                };
+                case 2: {
+                    console.log('HEADER RECEIVED');
+                };
+                case 3: {
+                    console.log('LOADING')
+                };
+                case 4: {
+                    console.log('DONE');
+                }
+            }
+
+        }
+        // open 写在 onreadystatechange 监听后面，否则错过 readystate = 1 的状态
+        xhr.open('GET', 'https://www.easy-mock.com/mock/5bcde2026c5cf5220c328e19/myspace/list');
+        xhr.send();
+        xhr.onload = function (ev) {
+            if(xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
+                console.log('request is successful');
+                console.log(this.responseText);
+                document.write(this.responseText);
+                document.close();
+                console.log(JSON.stringify(ev));
+            }
+        }
+        xhr.onerror = function (ev) {
+            console.log('error: ' + ev);
+        }
+    </script>
+</body>
+</html>

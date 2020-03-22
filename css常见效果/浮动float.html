@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>浮动</title>
+    <style>
+        .left {
+            width: 100px;
+            height: 200px;
+            background-color: blue;
+            float: left;
+        }
+
+        .main {
+            height: 200px;
+            margin-left: 102px;
+            background-color: red;
+        }
+
+
+        .fr-right {
+            width: 100px;
+            height: 200px;
+            background-color: green;
+            float: right;
+        }
+
+        .fr-main {
+            height: 200px;
+            background-color: pink;
+            margin-right: 102px;
+        }
+
+        .th-left {
+            width: 100px;
+            background-color: blue;
+            height: 200px;
+            float: left;
+        }
+
+        .th-right {
+            height: 200px;
+            width: 100px;
+            float: right;
+            background-color: blue;
+        }
+
+        .th-main {
+            margin-left: 102px;
+            margin-right: 102px;
+            background-color: red;
+            height:200px;
+        }
+
+        .left-nav {
+            border: 1px solid #fdebcb;
+        }
+
+        .left-nav>ul>li {
+            list-style: none;
+            float: left;
+            margin-left:10px;
+        }
+
+        /*
+          用多余的.left-nav-clear元素来清除浮动
+         */
+        .left-nav .left-nav-clear {
+            float: none;
+            clear: left;
+        }
+        .right-nav {
+            float:right;
+            border: 1px solid #ccc;
+        }
+
+        .right-nav>ul>li {
+            float:left;
+            list-style: none;
+            margin-left: 10px;
+        }
+
+        /*
+        用伪元素来清除浮动
+         */
+        .right-nav::after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+        <div class="float-left">
+            <div class="left">
+
+            </div>
+            <div class="main">
+            </div>
+        </div>
+
+        <div class="float-right">
+            <div class="fr-right">
+
+            </div>
+            <div class="fr-main"></div>
+        </div>
+
+        <div class="three">
+            <div class="th-left"></div>
+            <div class="th-right"></div>
+            <div class="th-main"></div>
+        </div>
+
+        <div class="left-nav">
+            <ul>
+                <li>1.首页</li>
+                <li>2.电影</li>
+                <li>3.漫画</li>
+                <li>4.新闻</li>
+                <li class="left-nav-clear"></li>
+            </ul>
+        </div>
+        <div class="right-nav">
+            <ul>
+                <li>1.首页</li>
+                <li>2.电影</li>
+                <li>3.漫画</li>
+                <li>4.新闻</li>
+            </ul>
+        </div>
+</body>
+</html>

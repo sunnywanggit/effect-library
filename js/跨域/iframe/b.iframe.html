@@ -1,0 +1,29 @@
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        html,body{
+            margin: 0;
+        }
+        input{
+            margin: 20px;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+<input id="input" type="text"  placeholder="http://b.zero.com:8080/b.iframe.html">
+<script>
+
+    // 当前页面访问地址为: http://b.zero.com:8080/b.iframe.html
+
+    document.querySelector('#input').addEventListener('input', function(){
+        window.parent.document.querySelector('input').value = this.value;
+    })
+
+    document.domain = 'zero.com';
+
+</script>
+</body>
+</html>

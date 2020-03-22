@@ -1,0 +1,67 @@
+
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <style>
+        .ct{
+            width: 910px;
+            margin: auto;
+        }
+        .main{
+            float: left;
+            width: 450px;
+            height: 300px;
+            border: 1px solid #ccc;
+        }
+        .main input{
+            margin: 20px;
+            width: 300px;
+        }
+        .iframe{
+            float: right;
+        }
+
+        iframe{
+            width: 450px;
+            height: 300px;
+            border: 1px dashed #ccc;
+        }
+    </style>
+</head>
+<div class="ct">
+    <h1>postMessage发送消息实现跨域</h1>
+    <div class="main">
+        <input type="text" placeholder="http://a.zero.com:8080/a.html">
+    </div>
+
+    <iframe src="http://b.zero.com:8080/b.html" frameborder="0" ></iframe>
+
+</div>
+
+
+<script>
+
+    // vim /etc/hosts
+    // a.zero.com b.zero.com zero.com 都解析到 127.0.0.1
+
+    // 通过 postMessage 向 b.html 发送消息达到跨域交互的效果
+    var input = document.querySelector('.main input');
+    input.addEventListener('input',function () {
+        console.log('a.html input.value=' + this.value);
+        window.frames[0].postMessage(this.value,'*');
+
+    })
+
+    // 监听来自 b.html 的 message 消息，并赋值给当前页面 input
+    window.addEventListener('message',function (ev) {
+        input.value = ev.data;
+        console.log(e.data);
+    })
+
+
+
+</script>
+</html>
+
+

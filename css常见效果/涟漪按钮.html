@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>涟漪按钮</title>
+
+    <style>
+
+
+        .button {
+            position: relative;
+            box-sizing: border-box;
+            display: block;
+            height: 36px;
+            line-height: 36px;
+            padding: 0 16px;
+            background: none;
+            text-decoration: none;
+            font-size: 14px;
+            border: none;
+            transition: all .3s; /*添加渐变动画效果*/
+            border: 1px solid red;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .button:hover {
+            background: #e5e5e5;
+        }
+        .button:focus {
+            outline: none;
+            background: #e5e5e5;
+        }
+
+        .circle {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            display: block;
+            top: 0;
+            left: 0;
+            /*top: 50%;*/
+            /*left: 50%;*/
+            background-color: lightblue;
+            /*margin-left: -5px;*/
+            /*margin-top: -5px;*/
+            transition: transform 1s;
+            border-radius: 50%;
+            visibility: hidden;
+            pointer-events: none; /*不响应事件，直接穿透*/
+            z-index: -1;
+
+        }
+
+        .active {
+            transform: scale(200);
+            visibility: visible;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+
+    <button class="button">
+        <span class="circle"></span>确定
+    </button>
+    <p>
+        TIPS <br>
+        1. 渐变 transition: all .3s(试试效果)<br>
+        2. display: none 的元素不能加动画效果，要用visibility: hidden;<br>
+        3. pointer-events: none 元素不响应用户的任何鼠标事件 (css 搜索 user action none)<br>
+    </p>
+    <script>
+
+        var btn = document.querySelector('.button');
+        var circle = document.querySelector('.circle');
+        function getAbsolutePos(obj) {
+            if(obj === null || obj === undefined) {
+                return;
+            }
+            var pos = {};
+            pos.x = obj.offsetLeft;
+            pos.y = obj.offsetTop;
+            while (obj = obj.offsetParent) {
+                pos.x += obj.offsetLeft;
+                pos.y += obj.offsetTop;
+
+            }
+            return pos;
+        }
+        var btn_pos = getAbsolutePos(btn);
+        console.log('btn_pos: x1: ' + btn_pos.x + ' y1: ' +
+            btn_pos.y + ' x2: ' + (btn_pos.x + btn.offsetWidth) + ' y2: ' + (btn_pos.y + btn.offsetHeight));
+        btn.addEventListener('click',function (e) {
+            var x = e.clientX;
+            var y = e.clientY;
+            console.log('x: ' + x + ' y: ' + y);
+            if(x <= btn_pos.x + btn.offsetWidth && x >= btn_pos.x)
+            {
+                if(y <= btn_pos.y + btn.offsetHeight && y >= btn_pos.y) {
+
+                    var left = x - btn_pos.x + 'px';
+                    var top = y - btn_pos.y + 'px';
+                    console.log(left + ' , ' + top);
+                    circle.style.left = left;
+                    circle.style.top = top;
+                    circle.classList.add('active');
+                }
+            }
+        })
+
+        circle.addEventListener('transitionend',function () {
+            circle.classList.remove('active');
+        })
+
+
+    </script>
+
+
+</body>
+</html>

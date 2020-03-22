@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>可以放大缩小的modal</title>
+    <style>
+
+        body {
+            height: 3000px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .parent{
+            border: 1px solid red;
+            padding: 10px;
+            margin-left: 100px;
+            position: relative;
+
+        }
+
+        .parent.active {
+            cursor: nwse-resize;
+        }
+        .son{
+            margin-left: 300px;
+            height: 300px;
+            border: 1px solid red;
+        }
+
+        .anchor{
+            position: absolute;
+            content: '';
+            display: block;
+            width: 20px;
+            height: 20px;
+            background-color: green;
+            bottom: 10px;
+            left: 590px;
+        }
+
+        .anchor.entered {
+            cursor: nwse-resize;
+        }
+
+        /*绝对定位的元素没有 hover*/
+        /*.son:after:hover{ */
+            /*cursor: s-resize;*/
+            /*background-color: yellow;*/
+        /*}*/
+    </style>
+</head>
+<body>
+    <div class="parent">
+        <div class="son"></div>
+        <span class="anchor"></span>
+    </div>
+
+    <script>
+
+        var atAnchor = false;
+        var anchor = document.querySelector('.anchor');
+        var container = document.querySelector('.parent');
+        var son = document.querySelector('.son');
+        console.log('anchor bounding ', anchor.getBoundingClientRect());
+        console.log('son bounding', son.getBoundingClientRect())
+        let {left} = son.getBoundingClientRect();
+
+        console.log()
+        anchor.addEventListener('mouseenter',function (e) {
+            console.log('mouseenter');
+            e.target.classList.add('entered');
+            container.classList.add('active');
+        })
+
+        anchor.addEventListener('mouseleave',function (e) {
+            console.log('leaveed..');
+            e.target.classList.remove('entered');
+        })
+
+        anchor.addEventListener('mousedown',function (e) {
+            console.log('锚点鼠标按下了...')
+            atAnchor = true;
+        })
+
+        document.addEventListener('mouseup',function (e) {
+            console.log('锚点鼠标松开了...')
+            container.classList.remove('active');
+            atAnchor = false;
+        })
+
+        container.addEventListener('mousemove',(e)=>{
+            if(atAnchor){
+                console.log(e);
+                son.style.width = (e.pageX - 300) + 'px';
+                son.style.height = e.pageY + 'px';
+                // setTimeout(function () {
+                //
+                // },300)
+            }
+
+        })
+
+    </script>
+</body>
+</html>

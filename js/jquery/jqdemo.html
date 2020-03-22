@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+
+    <meta charset="utf-8">
+    <title>jqueryAPI练习</title>
+</head>
+<body>
+<div class="ct">
+    我是容器div
+    <h3>标题3</h3>
+    <p>你好，我是段落</p>
+    <div class="list">
+        list
+        <ul>
+            <li class="item">item 1</li>
+            <li class="item item2">item 2</li>
+            <li class="item">item 3</li>
+            <li class="item">item 4</li>
+        </ul>
+    </div>
+
+</div>
+<script>
+    function p(jnode){
+        console.log(jnode.text());
+    }
+
+    // .eq
+    // .next / .prev
+    // .nextAll / .prevAll
+    // .siblings
+    // .parent / .parents
+    // .children / .find
+    // .filter
+    // .has
+    // .is
+
+    var div = $('.ct');
+    p(div);
+    console.log('find-----')
+    var h3 = $('.ct').find('h3');
+    p(h3);
+    console.log('eq------')
+    var items = $('.item');
+    console.log(items.length);
+    p(items.eq(2));
+    p(items.eq(1).next());
+    console.log('prevAll----')
+    var prevAll = $('.list').prevAll();
+    console.log(prevAll.length);
+    p($(prevAll[0]));
+    p($(prevAll[1]));
+    console.log('nextAll----')
+    var nextAll = $('h3').nextAll();
+    p($(nextAll[0]));
+    p($(nextAll[1]));
+
+    console.log('siblings---')
+    console.log($('.item').eq(0).siblings().length);
+
+    console.log('parent---')
+    p($('ul').parent())
+    console.log('parents----')
+    // p($('ul').parents())
+
+    console.log('filter----');
+    p($('.item').filter('.item2'));
+    console.log('has----')
+    p($('.list').has('.item'));
+    console.log('is----')
+    var is = $('.item2').is('li');
+    console.log(is);
+</script>
+</body>
+</html>

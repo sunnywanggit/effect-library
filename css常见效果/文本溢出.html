@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>文本溢出</title>
+    <style>
+        .single {
+            width: 100px;
+            border: 1px solid red;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .multiple {
+            width: 200px;
+            border: 1px solid red;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+
+    </style>
+</head>
+<body>
+        <div class="layout">
+            <h4>单杭文本溢出</h4>
+            <div class="single">
+                hellloooooooooo
+            </div>
+
+            <h4>多行文本溢出</h4>
+            <div class="multiple">
+                hellollllllllll000000000
+                ce
+                gag
+                g
+
+                xgaa
+                gg
+                x
+                hellollllllllll000000000
+                ce
+                gag
+                g
+
+                xgaa
+                gg
+                x
+                hellollllllllll000000000
+                ce
+                gag
+                g
+
+                xgaa
+                gg
+                x
+                hellollllllllll000000000
+                ce
+                gag
+                g
+
+                xgaa
+                gg
+                x
+            </div>
+        </div>
+
+
+</body>
+</html>

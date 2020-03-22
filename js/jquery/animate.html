@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+
+    <meta charset="utf-8">
+    <title>jquery animate</title>
+    <style>
+        .div {
+            width: 60px;
+            height: 60px;
+            background-color: red;
+            position: absolute;
+        }
+        .ct {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <button id="show">show</button>
+    <button id="hidden">hidden</button>
+    <button id="up">slideup</button>
+    <button id="down">slidedown</button>
+    <button id="toggle">slidetoggle</button>
+    <button id="in">fadein</button>
+    <button id="out">fadeout</button>
+    <button id="animate">animate</button>
+    <button id="clear">clearQueue</button>
+    <button id="stop1">stop(true,false)</button>
+    <button id="stop2">stop(true,true)</button>
+    <button id="stop3">stop(false,true)</button>
+    <button id="stop4">stop(false,false)</button>
+    <button id="finish">finish</button>
+    <div class='ct'>
+        <div class="div">
+        </div>
+    </div>
+
+    <script>
+        $('#show').on('click',function(){
+            $('.div').show('slow');
+            //$('.div').show(5000);
+        })
+
+        $('#hidden').on('click',function(){
+            $('.div').hide('normal');
+        })
+
+        $('#up').on('click',function(){
+            $('.div').slideUp();
+        })
+
+        $('#down').on('click',function(){
+            $('.div').slideDown('fast');
+        })
+
+        $('#toggle').on('click',function(){
+            $('.div').slideToggle();
+        })
+
+        $('#in').on('click',function(){
+            $('.div').fadeIn();
+        })
+
+        $('#out').on('click',function(){
+            $('.div').fadeOut();
+        })
+
+        $('#animate').on('click',function(){
+            $('.div').animate({
+                top: 0,
+                left: 300
+            },3000).animate({
+                top:100,
+                left:300
+            },3000).animate({
+                top:100,
+                left:0
+            },5000,function(){
+                console.log('animation end')
+            })
+        })
+
+        $('#clear').on('click',function(){
+            $('.div').clearQueue();
+        })
+
+        $('#stop1').on('click',function(){
+            // stop(clearQueue, jumpToEnd);
+            $('.div').stop(true,false);
+        })
+
+
+        $('#stop2').on('click',function(){
+            // stop(clearQueue, jumpToEnd);
+            $('.div').stop(true,true);
+        })
+
+        $('#stop3').on('click',function(){
+            // stop(clearQueue, jumpToEnd);
+            $('.div').stop(false,true);
+        })
+        $('#stop4').on('click',function(){
+            // stop(clearQueue, jumpToEnd);
+            $('.div').stop(false,false);
+        })
+
+        $('#finish').on('click',function(){
+            $('.div').animate({
+                top:0,
+                left:0
+            }).finish();
+        })
+
+
+
+    </script>
+
+</body>
+</html>

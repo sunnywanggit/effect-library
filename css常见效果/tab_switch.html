@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+
+    <meta charset="utf-8">
+    <title>TAB切换</title>
+    <style>
+        .ct,.ct2 {
+            margin-top: 30px;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        ul,ol{
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .clearfix:after{
+            content:'';
+            display: block;
+            clear: both;
+        }
+        .tab {
+            float:left;
+            width: 50px;
+            height: 40px;
+            line-height:40px;
+            border-left: 1px solid #ccc;
+            border-top: 1px solid #ccc;
+            /* outline:1px solid green; */
+            background:#ddd;
+        }
+        .tab:last-child {
+            border-right: 1px solid #ccc;
+        }
+        .panel {
+            width: 250px;
+            border: 1px solid #ccc;
+            height: 200px;
+            display: none;
+        }
+        .active {
+            display: block;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+<div class="ct">
+    jQuery 实现 TAB 切换
+    <ul class="tabs clearfix">
+        <li class="tab active">1</li>
+        <li class="tab">2</li>
+        <li class="tab">3</li>
+        <li class="tab">4</li>
+    </ul>
+    <div class="panels">
+        <div class="panel active">panel1</div>
+        <div class="panel">panel2</div>
+        <div class="panel">panel3</div>
+        <div class="panel">panel4</div>
+    </div>
+</div>
+
+<div class="ct2">
+    原生 js 实现 TAB 切换
+    <ul class="tabs clearfix">
+        <li class="tab active">1</li>
+        <li class="tab">2</li>
+        <li class="tab">3</li>
+        <li class="tab">4</li>
+    </ul>
+    <div class="panels">
+        <div class="panel active">panel1</div>
+        <div class="panel">panel2</div>
+        <div class="panel">panel3</div>
+        <div class="panel">panel4</div>
+    </div>
+</div>
+<script>
+
+    //    jquery 实现tab切换
+
+
+    $('.ct .tabs .tab').on('click',function(){
+        $(this).addClass('active').siblings().removeClass('active');
+        var panellist = $(this).parent().next().children();
+//   var panellist = $('.panels .panel');
+        console.log(panellist);
+        panellist.eq($(this).index()).addClass('active').siblings().removeClass('active');
+
+    });
+
+
+    // 原生 js 实现 dom 切换效果
+
+    var tabs2 = document.querySelectorAll('.ct2 .tab');
+    tabs2.forEach(function(tab){
+        tab.addEventListener('click',function(event){
+            var index;
+            // 去掉其他的 active
+            document.querySelectorAll('.ct2 .tab').forEach(function(t, i){
+                if(t === tab){
+                    index = i;
+                }
+                t.classList.remove('active');
+            });
+            // 给自己加上 active
+            this.classList.add('active');
+
+            // console.log(index);
+
+            // panel 跟着变化
+            document.querySelectorAll('.ct2 .panel').forEach(function(p,p_index){
+                p.classList.remove('active');
+                if(p_index === index){
+                    p.classList.add('active');
+                }
+            });
+        });
+    });
+
+
+</script>
+</body>
+</html>

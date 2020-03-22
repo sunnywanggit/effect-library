@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+    <meta charset="utf-8">
+    <title>jquery增删平均布局</title>
+    <style>
+        ul,ol{
+            list-style: none;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .ct {
+            margin: 0 auto;
+            margin-top: 20px;
+            width:766px;
+        }
+        .ct>h2 {
+            color: #555;
+            margin-bottom:15px;
+        }
+        .items {
+            margin-right:-20px;
+
+        }
+        .item {
+            float: left;
+            border: 1px solid #ccc;
+            padding: 10px 20px;
+            margin-right:20px;
+            margin-bottom: 20px;
+            color:#666;
+            position: relative;
+        }
+        .cover{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.6;
+            background-color: #858080a8;
+            height: 100%;
+            width: 100%;
+            display: none;
+        }
+        .items>ul::after{
+            content:'';
+            display:block;
+            clear:both;
+        }
+        .buttons {
+            margin-top:15px;
+        }
+        .button {
+            border: 1px solid #ff0000;
+            line-height: 24px;
+            padding:10px;
+            border-radius: 5px;
+            margin-right:20px;
+            color: #ff0000;
+            cursor: pointer;
+        }
+
+        .delete {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            padding: 10px;
+            background-color: #ddebf5;
+            border-radius: 5px;
+            color: #ff0000;
+            display: none;
+            cursor: default;
+        }
+        .active {
+            display: block;
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div class="ct">
+        <h2>图片赏析</h2>
+        <div class="items">
+            <ul>
+                <li class="item">
+                    <div class="cover"></div>
+                    <div>
+                        <img src="https://picsum.photos/200/200/?image=222" alt="">
+                        <div><p class="title">白云金边</p><p>❤️1500</p></div>
+                    </div>
+                    <span class="delete">删除</span>
+                </li>
+                <li class="item">
+                    <div class="cover"></div>
+                    <div>
+                        <img src="https://picsum.photos/200/200/?image=223" alt="">
+                        <div><p class="title">光阴模糊</p><p>❤️1500</p></div>
+                    </div>
+                    <span class="delete">删除</span>
+                </li>
+                <li class="item">
+                    <div class="cover"></div>
+                    <div>
+                        <img src="https://picsum.photos/200/200/?image=200" alt="">
+                        <div><p class="title">荒漠羊驼</p><p>❤️1500</p></div>
+                    </div>
+                    <span class="delete">删除</span>
+                </li>
+            </ul>
+        </div>
+        <div class="buttons">
+            <span class="button add">添加</span>
+            <span class="button edit">编辑</span>
+        </div>
+    </div>
+
+    <script>
+        var isEdit = false;
+        var names = ['白云金边','光阴模糊','荒漠羊驼','取名无能','取名痛苦','取名尴尬'];
+        // var index = Math.floor(Math.random()*5);
+        // 编辑
+        $('.edit').on('click.edit',function () {
+            isEdit = !isEdit;
+            if(isEdit) {
+                $('.cover').addClass('active');
+                $('.delete').addClass('active');
+            }else{
+                $('.cover').removeClass('active');
+                $('.delete').removeClass('active');
+            }
+
+        })
+
+        // 删除用事件代理，否则新添加的无法删除
+        $('.items').on('click.delete','span',function () {
+            $(this).parent().remove();
+        })
+        var template = '<li class="item">\n' +
+            '                    <div class="cover"></div>\n' +
+            '                    <div>\n' +
+            '                        <img src="https://picsum.photos/200/200/?image=222" alt="">\n' +
+            '                        <div><p class="title">白云金边</p><p>❤️1500</p></div>\n' +
+            '                    </div>\n' +
+            '                    <span class="delete">删除</span>\n' +
+            '                </li>';
+        $tmp = $(template);
+        //console.log($tmp.find('img').prop('src'));
+        //console.log($tmp.find('.title').text());
+        // 新增
+        $('.add').on('click.add',function () {
+            if(isEdit){
+                $('.edit').trigger('click');
+            }
+            for(var i = 0; i < 3; i++){
+                var $item = $tmp.clone();
+                $item.find('img').prop('src','https://picsum.photos/200/200/?random');
+                $item.find('.title').text(names[Math.floor(Math.random()*5)]);
+                $('.items').children().eq(0).append($item);
+            }
+
+        })
+
+    </script>
+
+</body>
+</html>

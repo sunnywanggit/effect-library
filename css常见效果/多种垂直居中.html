@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>垂直居中</title>
+    <style>
+        .box {
+            width: 300px;
+            height: 200px;
+            border: 1px solid;
+            text-align: center;
+        }
+
+        .box::before {
+            content: '';
+            display: inline-block;
+            vertical-align: middle;
+            height: 70%;
+            width: 3px;
+            background: yellow;
+        }
+
+        .box img {
+            vertical-align: middle;
+            background: blue;
+        }
+
+        .box2 {
+            width: 300px;
+            height: 200px;
+            border: 1px solid;
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .space {
+            border: 1px solid;
+            width: 300px;
+            height: 200px; /*设置高度以显示居中效果*/
+            display: flex; /*弹性布局*/
+            align-items: center; /*垂直居中*/
+            justify-content: center; /*水平居中*/
+        }
+    </style>
+</head>
+<body>
+    <h3>伪元素垂直居中</h3>
+    <div class="box">
+        <img src="http://cdn.jirengu.com/public/logo-tiny.png" alt="">
+    </div>
+
+    <h3>利用表格垂直居中</h3>
+    <div class="box2">
+        <img src="http://cdn.jirengu.com/public/logo-tiny.png" alt="">
+    </div>
+    <h3>display: flex; 实现居中</h3>
+    <div class="space">
+        <img src="http://cdn.jirengu.com/public/logo-tiny.png" alt="">
+    </div>
+
+
+</body>
+</html>

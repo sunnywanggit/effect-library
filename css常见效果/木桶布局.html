@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>木桶布局</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .barrel{
+            padding: 0 10px;
+        }
+
+        .barrel>figure {
+            display: inline-block;
+            padding: 0 2px;
+        }
+
+        .barrel>figure>img{
+            width: 100%;
+            height: 100%;
+        }
+
+        .inputWrapper{
+            text-align: center;
+            padding: 50px 0;
+        }
+        .inputWrapper>input[type=text]{
+            margin-right: 10px;
+            line-height: 20px;
+            padding: 5px;
+            box-sizing: border-box;
+            width: 180px;
+        }
+        .inputWrapper>input[type=text]:focus{
+            outline: none;
+        }
+        .inputWrapper>button{
+            padding: 5px 15px;
+            line-height: 20px;
+            background-color: #ccc;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+        }
+        .inputWrapper>button:focus{
+            outline: none;
+            opacity: 0.8;
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+    <div class="inputWrapper">
+        <input id='input' type="text" placeholder="输入关键字，回车搜索图片"><button id="button">搜索</button>
+    </div>
+    <main class="barrel">
+    </main>
+    <script>
+
+
+        class Event{
+            static on(type, handler){
+                return document.addEventListener(type, handler);
+            }
+            static trigger(type, data){
+                return document.dispatchEvent(new CustomEvent(type, {
+                    detail: data
+                }))
+            }
+        }
+
+        class Interaction {
+            constructor(){
+                this.bind();
+            }
+            bind(){
+
+                $(window).on('scroll', this.throttle(() => {
+                    if(this.isHitBottom()){
+                        Event.trigger('bottom');
+                    }
+                }, 300))
+
+                $(window).on('resize',this.throttle(() => {
+                    Event.trigger('resize');
+                }, 300))
+
+                $('#input').on('keydown',function (e) {
+                    if(e.keyCode === 13){
+                        console.log('enter key down...');
+                        let keyword = e.target.value.trim();
+                        if(keyword.length > 0){
+                            console.log('keyword=' + keyword);
+                            Event.trigger('search',keyword);
+                        }
+                    }
+                })
+
+                $('#button').on('click',function () {
+                    let keyword = $('#input').val().trim();
+                    if(keyword.length > 0){
+                        Event.trigger('search', keyword);
+                    }
+                })
+
+                // window.onscroll = this.throttle(() =>{
+                //     if(this.isHitBottom()){
+                //         Event.trigger('bottom');
+                //     };
+                // },300)
+
+            }
+            throttle(fn, delay){
+                let timer = null;
+                return () => {
+                    clearTimeout(timer);
+                    timer = setTimeout(() => fn.bind(this)(arguments),delay)
+                }
+            }
+            isHitBottom(){
+                console.log('scrolling...hit bottom...')
+                var flag = $(window).scrollTop() + $(window).height() + 10 >= $('.barrel').height();
+                console.log(flag);
+                return flag;
+            }
+        }
+        new Interaction();
+
+        class Loader{
+            constructor(){
+                this.per_page = 20;
+                this.page = 1;
+                this.hasMore = false;
+                this.keyWord = '';
+                this.isLoading = false;
+                this.bind();
+                // this.loadData()
+                //     .then(data => { //console.log(data);
+                //          this.dealData(data)})
+                //     .catch(err => console.log('loadData err..', err));
+            };
+            bind(){
+                Event.on('bottom',e => {
+                    this.loadMore();
+                })
+                Event.on('search',e => {
+                    console.log('received search event...data=' + e.detail);
+                    this.keyWord = e.detail;
+                    this.page = 1;
+                    this.hasMore = false;
+                    this.isLoading = false;
+                    this.loadData().then(data => this.dealData(data)).catch(err => console.log('loadData err...', err))
+                })
+            }
+            loadData(){
+                if(this.isLoading) { console.log('wait for previous loading...'); return; }
+                this.isLoading = true;
+                return fetch(this.fullUrl()).then( res => {
+                    this.isLoading = false;
+                    return res.json();
+                })
+
+            };
+            loadMore(){
+                //console.log('loadMore enter..')
+                //console.log(this.hasMore);
+                if(this.hasMore){
+                    this.loadData().then(data => this.dealData(data)).catch(err => console.log('loadmore err..', err));
+                }
+            };
+            dealData(data){
+                if(data.totalHits >= this.per_page * this.page){
+                    this.hasMore = true;
+                }else{
+                    this.hasMore = false;
+                }
+                if(this.hasMore){
+                    this.page += 1;
+                }
+                Event.trigger('loadover', data.hits)
+            }
+            fullUrl(){
+                var data = {
+                    key: '5856858-0ecb4651f10bff79efd6c1044',
+                    q: this.keyWord,
+                    image_type: 'photo',
+                    per_page: this.per_page,
+                    page: this.page,
+                }
+                var url = 'https://pixabay.com/api';
+                let arr = [];
+                for(let key in data){
+                    arr.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+                }
+                var s = url + '?' + arr.join('&');
+                // console.log(s);
+                return s;
+            }
+        }
+
+        new Loader();
+
+
+        // 木桶布局的思路
+        // 判断一行可以放下多少张图片,需要在图片加载完成之前就知道图片的宽高(接口提供了)
+        // 放不下的时候换行
+        // 换行的关键是上一行的图片撑满容器的宽度
+
+        class Barrel{
+            constructor(){
+                this.rowHeightBase = 200;
+                this.mainNodeWidth = $('.barrel').width();
+                this.rowImages = [];
+                this.rowImagesWidthSum = 0;
+                this.allImages = [];
+                this.bind();
+            }
+            bind(){
+                Event.on('loadover', e => {
+                    console.log('loadover event received...',e);
+                    this.allImages.push(...e.detail);
+                    this.barrel(e.detail);
+                })
+                Event.on('resize',e => {
+                    console.log('resizing....')
+                    this.rowImages = [];
+                    this.rowImagesWidthSum = 0;
+                    this.mainNodeWidth = $('.barrel').width();
+                    $('.barrel').empty();
+                    this.barrel(this.allImages);
+                })
+                Event.on('search', e => {
+                    this.allImages = [];
+                    this.rowImages = [];
+                    this.rowImagesWidthSum = 0;
+                    $('.barrel').empty();
+                    this.mainNodeWidth = $('.barrel').width();
+                })
+            }
+            barrel(imageArray){
+                imageArray.forEach(imageInfo => {
+                    //console.log('mainNodeWidth',this.mainNodeWidth);
+                    var ratio = imageInfo.webformatWidth / imageInfo.webformatHeight; // 图片宽高比
+                    var ratioImageWidth = this.rowHeightBase * ratio;
+                    if(ratioImageWidth + this.rowImagesWidthSum <= this.mainNodeWidth){
+                        // 这张图片在这一行还能放得下
+                        this.rowImages.push(imageInfo);
+                        this.rowImagesWidthSum += ratioImageWidth;
+                    }else {
+                        // 放不下了，渲染这一行图片
+                        let rowHeight = (this.mainNodeWidth / this.rowImagesWidthSum) * this.rowHeightBase;
+                        this.renderRow(this.rowImages, rowHeight);
+                        // 换新的一行
+                        this.rowImages = [imageInfo];
+                        this.rowImagesWidthSum = ratioImageWidth;
+                    }
+                })
+                // 渲染最后一行
+                if(this.rowImages.length > 0){
+                    let rowHeight = (this.mainNodeWidth / this.rowImagesWidthSum) * this.rowHeightBase;
+                    this.renderRow(this.rowImages, rowHeight);
+                }
+
+            }
+            renderRow(rowImages, rowHeight){
+                rowImages.forEach(function (image) {
+                    var ratio = image.webformatWidth / image.webformatHeight; // 图片宽高比
+                    var figure = document.createElement('figure');
+                    var imgNode = document.createElement('img');
+                    imgNode.src = image.webformatURL;
+                    figure.appendChild(imgNode);
+                    figure.style.height = rowHeight + 'px';
+                    figure.style.width = rowHeight * ratio + 'px';
+                    document.querySelector('.barrel').appendChild(figure);
+                })
+            }
+        }
+
+        new Barrel();
+
+
+
+        
+
+
+
+
+
+    </script>
+</body>
+</html>

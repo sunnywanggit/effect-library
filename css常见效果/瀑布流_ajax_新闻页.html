@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+    <title>瀑布流ajax懒加载新闻页</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        ul,ol{
+            list-style: none;
+        }
+        a{
+            text-decoration: none;
+        }
+        .waterfall {
+            width: 900px;
+            margin: 0 auto;
+
+        }
+        .waterfall>ul{
+            position: relative;
+        }
+        .item{
+            position: absolute;
+            margin: 5px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .item img{
+            width: 250px;
+        }
+        .item h4{
+            border-bottom: 1px solid #ccc;
+            margin: 10px 0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="waterfall">
+        <ul>
+            <!--<li class="item">-->
+                <!--<a href="http://slide.tech.sina.com.cn/d/slide_5_453_123616.html/d/2">-->
+                    <!--<img src="http://n.sinaimg.cn/tech/transform/200/w600h400/20181116/G9rb-hnvukff6194808.jpg" alt="">-->
+                    <!--<h4>被时间冻结的全球15处遗址</h4>-->
+                <!--</a>-->
+            <!--</li>-->
+        </ul>
+        <div class="load">我是看不见的load</div>
+    </div>
+    <script>
+        var curPage = 1,
+            perPageCount = 10;
+        // var count = 0;
+        function loadAndPlace(){
+            $.ajax({
+                url: 'https://platform.sina.com.cn/slide/album_tech',
+                dataType: 'jsonp',   //这里使用了新浪新闻的 jsonp 接口，大家可以直接看数据， 如： https://platform.sina.com.cn/slide/album_tech?jsoncallback=func&app_key=1271687855&num=3&page=4
+                jsonp:"jsoncallback",
+                data: {
+                    app_key: '1271687855',
+                    num: perPageCount,
+                    page: curPage
+                }
+            }).done(function(ret){
+                if(ret && ret.status && ret.status.code === "0"){
+                    console.log(ret.data);
+                    placeItem(ret.data);
+                    curPage += 1;
+                }else{
+                    console.log('get error data');
+                }
+            });
+        }
+        loadAndPlace();
+
+        function placeItem(data) {
+            data.forEach(function (value) {
+                var s = `<li class="item">
+                            <a href="http://slide.tech.sina.com.cn/d/slide_5_453_123616.html/d/2">
+                                <img src="http://n.sinaimg.cn/tech/transform/200/w600h400/20181116/G9rb-hnvukff6194808.jpg" alt="">
+                                <h4>被时间冻结的全球15处遗址</h4>
+                            </a>
+                        </li>`;
+                var $li = $(s);
+                $li.find('a').attr('href',value.url);
+                $li.find('img').attr('src',value.img_url);
+                $li.find('h4').text(value.short_name);
+                $li.find('img').on('load',function () { // 图片load之后再进行瀑布流计算，否则高度会出错
+                    // console.log('img loaded ', count);
+                    $('.waterfall>ul').append($li);
+                    // count++;
+                    //console.log($li.outerHeight(true));
+                    //console.log($li.outerWidth(true));
+                    waterFallLayout($li);
+                })
+
+            })
+        }
+        var initWaterFall = false;
+        var colHeightArray = [];
+        function waterFallLayout($node) {
+            var itemWidth = $node.outerWidth(true);
+            console.log('itemWidth ' + itemWidth);
+            if(!initWaterFall){
+                var colNumbers = Math.floor($('.waterfall>ul').width() / itemWidth);
+                console.log('colNumbers ' + colNumbers);
+                for(var i = 0; i < colNumbers; i++){
+                    colHeightArray.push(0);
+                }
+                initWaterFall = true;
+            }
+            //console.log(colHeightArray)
+            $node.each(function(index){
+
+                // 每个img都去找一下当前最矮的列
+                var minValue = colHeightArray[0];
+                var minIndex = 0;
+                for(var i = 0; i < colHeightArray.length; i++){
+                    if(minValue > colHeightArray[i]){
+                        minValue = colHeightArray[i];
+                        minIndex = i;
+                    }
+                }
+
+                // 找到最矮的列把自己插进去
+                $(this).css({
+                    left: minIndex * itemWidth ,
+                    top: minValue
+                })
+
+                // 插入一张图片后更新数组的高度
+                colHeightArray[minIndex] += $node.outerHeight(true);
+                // console.log(colHeightArray)
+                $('.waterfall>ul').height(Math.max.apply(null,colHeightArray)); // 把ul的高度撑开
+            })
+        }
+
+        function isLoadShow() {
+            if($('.load').offset().top <= $(window).scrollTop() + $(window).height() + 10){ // 10px的缓冲
+                return true;
+            }else {
+                return false;
+            }
+        }
+        var timer = undefined; // 滚动事件节流
+        $(window).on('scroll',function () {
+            timer && clearTimeout(timer);
+
+            timer = setTimeout(function () {
+                if(isLoadShow()){ // 滚动到load出现在视野中，需要ajax请求更多新闻
+                    loadAndPlace();
+                }
+            },300)
+        })
+
+    </script>
+</body>
+</html>

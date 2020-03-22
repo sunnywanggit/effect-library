@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="//code.jquery.com/jquery-1.9.1.min.js"></script>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta charset="utf-8">
+    <title>瀑布流waterfall</title>
+</head>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    .waterfall{
+        /* width: 600px; */
+        /* border: 1px solid yellow; */
+        position: relative;
+        /* padding-left: 100px; */
+        /* padding-right: 100px */
+    }
+
+    .waterfall>img{
+        position: absolute;
+        margin: 5px;
+        width: 100px;
+        transition: all .3s;
+    }
+
+
+</style>
+<body>
+<div class="waterfall">
+    <img src="http://via.placeholder.com/300x200" alt="300*100">
+    <img src="http://via.placeholder.com/100x70" alt="300*70">
+    <img src="http://via.placeholder.com/100x150" alt="300*150">
+    <img src="http://via.placeholder.com/100x250" alt="300*250">
+    <img src="http://via.placeholder.com/200x80" alt="300*80">
+    <img src="http://via.placeholder.com/100x90" alt="300*90">
+    <img src="http://via.placeholder.com/100x120" alt="300*120">
+    <img src="http://via.placeholder.com/100x210" alt="300*210">
+    <img src="http://via.placeholder.com/100x230" alt="300*230">
+    <img src="http://via.placeholder.com/100x100" alt="300*100">
+    <img src="http://via.placeholder.com/100x70" alt="300*70">
+    <img src="http://via.placeholder.com/100x150" alt="300*150">
+    <img src="http://via.placeholder.com/100x250" alt="300*250">
+    <img src="http://via.placeholder.com/100x80" alt="300*80">
+    <img src="http://via.placeholder.com/100x90" alt="300*90">
+    <img src="http://via.placeholder.com/100x120" alt="300*120">
+    <img src="http://via.placeholder.com/100x210" alt="300*210">
+    <img src="http://via.placeholder.com/200x230" alt="300*230">
+
+
+</div>
+
+<script>
+
+    layout();
+    function layout(){
+        var colHeightArray = [];
+        var imgWidth = $('.waterfall img').outerWidth(true);
+        console.log('imgWidth ' + imgWidth);
+        var colNumbers = Math.floor($('.waterfall').width() / imgWidth);
+        console.log('colNumbers ' + colNumbers);
+        for(var i = 0; i < colNumbers; i++){
+            colHeightArray.push(0);
+        }
+        $('.waterfall>img').each(function(index,value){
+
+            // 每个img都去找一下当前最矮的列
+            var minValue = colHeightArray[0];
+            var minIndex = 0;
+            for(var i = 0; i < colHeightArray.length; i++){
+                if(minValue > colHeightArray[i]){
+                    minValue = colHeightArray[i];
+                    minIndex = i;
+                }
+            }
+
+            // 找到最矮的列把自己插进去
+            $(this).css({
+                // left: 100 + minIndex * imgWidth , // 100是父容器的左padding
+                left: minIndex * imgWidth ,
+                top: minValue
+            })
+
+            // 插入一张图片后更新数组的高度
+            colHeightArray[minIndex] += $(this).outerHeight(true);
+        })
+    }
+
+
+
+    $(window).on('resize',function(){
+        layout();
+    })
+</script>
+</body>
+</html>
